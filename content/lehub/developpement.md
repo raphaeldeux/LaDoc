@@ -58,9 +58,8 @@ npx jest -t "nom du test"   # filtrer par nom
 
 Les tests vivent dans `__tests__/`, en miroir de l'arborescence source (`__tests__/api`, `__tests__/components`, `__tests__/lib`).
 
-{{< hint warning >}}
-`npm run lint` ne fonctionne plus : Next.js 16 a retiré la commande `next lint` et la configuration ESLint n'a pas encore été migrée au format flat config d'ESLint 9. La vérification de référence est `tsc --noEmit` + Jest.
-{{< /hint >}}
+> [!WARNING]
+> `npm run lint` ne fonctionne plus : Next.js 16 a retiré la commande `next lint` et la configuration ESLint n'a pas encore été migrée au format flat config d'ESLint 9. La vérification de référence est `tsc --noEmit` + Jest.
 
 ## Base de données
 
