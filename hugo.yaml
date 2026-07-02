@@ -2,11 +2,11 @@ baseURL: https://docs.fresquesystemique.org/
 title: Docs Fresque Systémique
 theme: hextra
 
-languageCode: fr-FR
+locale: fr-FR
 defaultContentLanguage: fr
 languages:
   fr:
-    languageName: Français
+    label: Français
     weight: 1
 
 menu:
