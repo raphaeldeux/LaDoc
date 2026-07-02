@@ -1,5 +1,5 @@
 baseURL: https://docs.fresquesystemique.org/
-title: Docs Fresque Systémique
+title: LaDocumentation
 theme: hugo-book
 
 locale: fr-FR
