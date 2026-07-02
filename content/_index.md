@@ -2,7 +2,7 @@
 title: Accueil
 ---
 
-# LaDocumentation
+# LaDoc
 
 Bienvenue sur la documentation technique du système d'information de **La Fresque Systémique**, une association qui sensibilise aux enjeux systémiques par des ateliers collaboratifs, en présentiel et en ligne.
 

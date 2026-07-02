@@ -1,5 +1,5 @@
 baseURL: https://docs.fresquesystemique.org/
-title: LaDocumentation
+title: LaDoc
 theme: hugo-book
 
 locale: fr-FR
