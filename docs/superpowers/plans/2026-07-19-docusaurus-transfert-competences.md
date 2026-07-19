@@ -127,7 +127,7 @@ const config: Config = {
           path: 'contenu',
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/raphaeldeux/LaDoc/tree/master/',
+          editUrl: 'https://github.com/raphaeldeux/LaDoc/tree/main/',
         },
         blog: false,
         theme: {
@@ -974,7 +974,7 @@ git commit -m "docs(si): section transverse, pièges connus, retrait du contenu 
 
 ```bash
 mkdir -p /home/ubuntu/LeRunbook/procedures
-cd /home/ubuntu/LeRunbook && git init -b master
+cd /home/ubuntu/LeRunbook && git init -b main
 ```
 
 - [ ] **Step 2 : Écrire `README.md`**
@@ -1092,7 +1092,7 @@ Utiliser la skill `mise-en-prod`, qui porte les conventions de déploiement des 
 - [ ] **Step 3 : Pousser le repo LaDoc**
 
 ```bash
-cd /home/ubuntu/LaDoc && git push origin master
+cd /home/ubuntu/LaDoc && git push origin main
 ```
 
 - [ ] **Step 4 : Déployer**
