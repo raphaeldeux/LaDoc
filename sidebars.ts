@@ -36,7 +36,6 @@ const sidebars: SidebarsConfig = {
         'lesite/deploiement',
       ],
     },
-    /*
     {
       type: 'category',
       label: 'LeBoard',
@@ -51,6 +50,7 @@ const sidebars: SidebarsConfig = {
         'leboard/deploiement',
       ],
     },
+    /*
     {
       type: 'category',
       label: 'Le SI transverse',
