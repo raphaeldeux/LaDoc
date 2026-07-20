@@ -113,12 +113,13 @@ export const revalidate = 300  // Revalidation toutes les 5 min
 
 ### Revalidation immédiate
 
-Quand un administrateur publie un contenu dans LeHub, un webhook POST vers `https://fresquesystemique.org/api/revalidate?secret=REVALIDATE_SECRET` force la revalidation immédiate :
+Quand un administrateur publie un contenu dans LeHub, un webhook POST vers `https://fresquesystemique.org/api/revalidate` force la revalidation immédiate. Le webhook inclut un en-tête HTTP `x-revalidate-secret` contenant le secret partagé :
 
 ```typescript
 // app/api/revalidate/route.ts (pseudo-code)
 export async function POST(req) {
-  if (req.nextUrl.searchParams.get('secret') !== REVALIDATE_SECRET) {
+  const secret = req.headers.get('x-revalidate-secret')
+  if (secret !== REVALIDATE_SECRET) {
     return new Response('Unauthorized', { status: 401 })
   }
   revalidatePath('/blog')

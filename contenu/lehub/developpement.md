@@ -142,8 +142,8 @@ Un environnement de dev **partagé** existe sur le VPS : `https://dev.hub.fresqu
 ### Accès (voir LeRunbook)
 
 - URL : `dev.hub.fresquesystemique.org`
-- Credentials : voir LeRunbook
-- Logs : `ssh VPS && docker compose logs app` (conteneur `lehub-app-1`)
+- Credentials et accès serveur : voir LeRunbook
+- Pour consulter les logs du conteneur : voir LeRunbook
 
 ### Utilité
 

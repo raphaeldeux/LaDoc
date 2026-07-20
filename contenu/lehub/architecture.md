@@ -17,7 +17,7 @@ sidebar_position: 3
 | **Payments** | HelloAsso API | OAuth2 client credentials |
 | **Email** | Resend | 6.12.0 |
 | **Charts** | Recharts | 3.8.0 |
-| **Infrastructure** | Docker + Nginx + VPS OVH | Reverse proxy Let's Encrypt |
+| **Infrastructure** | Docker + Nginx + VPS | Reverse proxy Let's Encrypt |
 | **CI/CD** | GitHub Actions | Deploy sur push `main` |
 
 ## Où vit quoi

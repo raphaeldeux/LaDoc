@@ -99,7 +99,7 @@ Admin LeHub publie un article
        │
        └─→ Webhook LeHub appelle
            POST https://fresquesystemique.org/api/revalidate
-               ?secret=REVALIDATE_SECRET
+               Header: x-revalidate-secret: <valeur>
            │
            ├─ Vérifie secret (401 si mauvais)
            │

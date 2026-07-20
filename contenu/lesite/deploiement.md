@@ -19,15 +19,15 @@ Le workflow est défini dans `.github/workflows/deploy.yml`.
 
 ### Étapes du pipeline
 
-```bash
-1. Checkout code (repo local CI)
-2. SSH vers VPS
-3. cd /path/to/LeSite && git pull origin main
-4. docker compose build --no-cache app
-5. docker compose up -d --no-deps app
-6. docker image prune -f (nettoie images)
-7. sudo systemctl reload nginx
-```
+Le workflow effectue en résumé :
+
+1. Checkout du code depuis GitHub.
+2. Accès au serveur de déploiement (les identifiants et la procédure complète sont dans LeRunbook).
+3. Mise à jour du code depuis `main`.
+4. Build de l'image Docker Next.js.
+5. Redémarrage du conteneur avec la nouvelle image.
+6. Nettoyage des images inutilisées.
+7. Reload du reverse proxy Nginx.
 
 **Explication** :
 
@@ -51,7 +51,7 @@ Le workflow est défini dans `.github/workflows/deploy.yml`.
                            │ SSH
                            ▼
         ┌────────────────────────────────────────┐
-        │  VPS OVH (/path/to/LeSite)        │
+        │  VPS (répertoire LeSite)               │
         │                                        │
         │  1. git pull origin main               │
         │  2. docker compose build app           │
@@ -63,7 +63,7 @@ Le workflow est défini dans `.github/workflows/deploy.yml`.
         ┌────────────────────────────────────────┐
         │  Nginx (port 80/443, reverse proxy)   │
         │  ↓                                    │
-        │  localhost:3002 (conteneur LeSite)   │
+        │  Conteneur LeSite (reverse proxy)    │
         └────────────────────────────────────────┘
                            │
                            ▼
@@ -75,14 +75,10 @@ Le workflow est défini dans `.github/workflows/deploy.yml`.
 ## Vérifier que le déploiement est passé
 
 1. **Commit déployé** : push vers `main` → regarder GitHub Actions (onglet « Workflows »).
-2. **Status du workflow** : ✅ all steps completed = succès ; ❌ = échec (consulter logs SSH).
-3. **Logs applicatifs** (VPS) :
-   ```bash
-   ssh VPS
-   docker compose logs app | tail -50
-   ```
+2. **Status du workflow** : ✅ all steps completed = succès ; ❌ = échec (consulter les logs du workflow GitHub).
+3. **Logs applicatifs** : en cas d'échec du workflow ou de problème détecté, les accès au serveur et les commandes de diagnostic se trouvent dans LeRunbook.
 4. **URL à recharger** : `https://fresquesystemique.org`
-   - La version new est active dès que le conteneur redémarre.
+   - La version nouvelle est active dès que le conteneur redémarre.
    - **Attention** : assets CSS/JS peuvent être cachés. Force-reload : **Ctrl+Shift+R** (Chrome/Firefox).
 
 ## Variantes d'env (dev, preview, prod)
@@ -101,32 +97,16 @@ Le passage **preview** → **prod** nécessite :
 2. Redéployer (la variable est inlinée au build).
 3. Robots moteurs verront la balise `<meta name="robots" content="index">`.
 
-## Secrets et variables d'environnement
+## Variables d'environnement
 
-### Sur GitHub Secrets
+Le CI/CD utilise deux niveaux de configuration :
 
-- `VPS_HOST` : adresse IP/domaine du VPS
-- `VPS_USER` : utilisateur SSH du VPS
-- `VPS_SSH_KEY` : clé privée SSH pour authentication
+- **Secrets GitHub** : identifiants d'accès au serveur (host, user, key).
+- **Fichier `.env` sur le serveur** : variables applicatives publiques (`NEXT_PUBLIC_*`) et secrets (NEXTAUTH_SECRET, REVALIDATE_SECRET, clés API).
 
-### Sur le VPS (`.env` docker-compose)
+Les identifiants d'infrastructure et les valeurs secrètes sont stockés dans **LeRunbook**, dont l'accès est restreint.
 
-```env
-# .env du VPS
-NEXT_PUBLIC_SITE_URL=https://fresquesystemique.org
-NEXT_PUBLIC_HUB_URL=https://hub.fresquesystemique.org
-NEXT_PUBLIC_ALLOW_INDEXING=true
-NEXTAUTH_SECRET=<valeur partagée hub>
-AUTH_SESSION_COOKIE_NAME=__Secure-fresque.session-token
-REVALIDATE_SECRET=<valeur partagée hub>
-CONTACT_NOTIFY_SECRET=<valeur partagée hub>
-RESEND_API_KEY=<clé Resend>
-CONTACT_EMAIL=contact@fresquesystemique.org
-NEXT_PUBLIC_PLAUSIBLE_DOMAIN=fresquesystemique.org
-NEXT_PUBLIC_PLAUSIBLE_HOST=https://plausible.fresquesystemique.org
-```
-
-Toute modification d'une variable `NEXT_PUBLIC_*` nécessite un redéploiement (rebuild Docker).
+**Important** : toute modification d'une variable `NEXT_PUBLIC_*` nécessite un redéploiement (rebuild Docker) pour être prise en compte, car ces valeurs sont inlinées dans le bundle au build time.
 
 ## Pièges de déploiement
 
@@ -171,43 +151,13 @@ Si tu publies un nouvel article dans LeHub juste après un déploiement LeSite, 
 - Webhook n'arrive pas (réseau, secret mauvais).
 - ISR cache prend jusqu'à 5 min.
 
-Vérification depuis le VPS :
+La revalidation immédiate est déclenchée par un webhook POST vers l'endpoint `/api/revalidate` avec un en-tête HTTP `x-revalidate-secret`. Les détails d'implémentation (test, diagnostic) se trouvent dans LeRunbook.
 
-```bash
-curl "https://fresquesystemique.org/api/revalidate?secret=REVALIDATE_SECRET"
-# Si secret bon: {revalidated: true}
-# Si secret mauvais: 401 Unauthorized
-```
+## Opérations manuelles et rollback
 
-## Commandes manuelles VPS
+Les déploiements manuels (sans GitHub Actions) et les rollbacks sont des opérations rares qui impliquent l'accès direct au serveur. Ces procédures, ainsi que toutes les commandes serveur et accès associés, sont documentées dans **LeRunbook**.
 
-Si tu dois redéployer manuellement sans GitHub (rare) :
-
-```bash
-ssh VPS
-cd /path/to/LeSite
-git pull origin main
-docker compose build --no-cache app
-docker compose up -d --no-deps app
-sudo systemctl reload nginx
-docker image prune -f
-```
-
-## Rollback
-
-S'il faut revenir à un déploiement précédent (rare) :
-
-```bash
-ssh VPS
-cd /path/to/LeSite
-git log main --oneline | head -10  # Cherche le commit précédent
-git reset --hard <commit-hash>
-git push origin main --force-with-lease  # ⚠️ Force push (dangereux, coord avec l'équipe)
-docker compose build --no-cache app
-docker compose up -d --no-deps app
-```
-
-Préfère coordonner un revert propre (nouveau commit) plutôt qu'une force-push.
+**Préférer** : coordonner un revert propre via un nouveau commit et un push vers `main` plutôt que des opérations manuelles directes sur le serveur.
 
 ## Performance post-déploiement
 
@@ -222,4 +172,4 @@ Temps de requête typique : < 100ms (sans revalidation) à ~500ms (revalidation 
 
 ## Monitoring et alertes
 
-Voir le Memory du projet pour le setup de monitoring VPS et alertes Telegram (script `scripts/vps-monitor.sh` qui tourne en cron).
+Le monitoring du serveur et les alertes Telegram associées (scripts, cron, configuration) sont gérés via **LeRunbook**.

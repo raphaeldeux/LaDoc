@@ -57,18 +57,14 @@ S'exécute après `quality` seulement si succès. SSH sur le VPS et redéploie.
 
 **Après déploiement réussi** :
 - Conteneur app tourne avec la dernière version.
-- Nginx reverse proxy (host) envoie les requêtes vers `localhost:3000` (conteneur app).
-- **Nginx doit être reloadé manuellement** : commande `sudo systemctl reload nginx` (voir LeRunbook).
+- Nginx reverse proxy (host) envoie les requêtes vers le conteneur app.
+- **Nginx doit être reloadé manuellement** : voir LeRunbook pour la commande de reload.
 
 ### Vérifier que le déploiement est passé
 
 1. **Commit deployé** : push vers `main` → regarder GitHub Actions, onglet « Workflows » → chercher le workflow `Deploy` pour ce commit.
-2. **Status** : ✅ all checks passed = succès ; ❌ = échec (consulter logs).
-3. **Logs applicatifs** (VPS) :
-   ```bash
-   ssh VPS
-   docker compose logs app | tail -50
-   ```
+2. **Status** : ✅ all checks passed = succès ; ❌ = échec (consulter les logs du workflow GitHub).
+3. **Logs applicatifs** : en cas d'échec ou pour diagnostic, les accès au serveur et les commandes de consultation des logs se trouvent dans LeRunbook.
 4. **Page à recharger** : la version new est active dès la fin du step 9 du deploy. **Attention** : les assets CSS/JS en cache navigateur peuvent être obsolètes. Force-reload : Ctrl+Shift+R (Chrome/Firefox).
 
 ## Architecture déploiement
@@ -137,7 +133,7 @@ En cas de problème post-déploiement :
 
 1. **Revert sur GitHub** : `git revert HEAD` + push vers `main`.
 2. **Attendre le redéploiement** : le workflow se déclenche avec la version précédente.
-3. Alternativement (immédiat mais non idéal) : SSH VPS + `git checkout [commit-précédent]` + `docker compose build app && docker compose up -d --no-deps app`.
+3. Alternativement (immédiat mais non idéal) : procédure manuelle sur le serveur (voir LeRunbook pour l'accès et les commandes).
 
 ## Environnements additionnels
 
@@ -166,9 +162,9 @@ En cas de problème post-déploiement :
 
 ### Conteneur app reste `exited` après déploiement
 
-- Vérifier les logs : `docker compose logs app`.
+- Vérifier les logs du conteneur.
 - Causes communes : variable d'env manquante, port déjà utilisé, erreur startup Next.js.
-- Solution : SSH + `docker compose logs app -f` pour suivre en temps réel, corriger, repush.
+- Solution : diagnostic via LeRunbook, corriger la cause, puis repush vers `main` pour retrigger le déploiement automatique.
 
 ### Assets CSS/JS obsolètes après déploiement
 
@@ -177,6 +173,5 @@ En cas de problème post-déploiement :
 
 ### Nginx reverse proxy renvoie 502 Bad Gateway
 
-- Cause : app container inaccessible sur `localhost:3000`.
-- Vérifier : `docker compose ps` (app doit être `up`).
-- Solution : `sudo systemctl reload nginx` (après vérifier que app est bien running).
+- Cause : conteneur app inaccessible.
+- Diagnostic et solutions (commandes serveur, reload nginx, etc.) : voir LeRunbook.
