@@ -22,9 +22,9 @@ Prérequis : Node 18+.
 ```
 contenu/           # les pages de la documentation (dossier docs de Docusaurus)
   accueil.md       # vue d'ensemble du SI
-  lehub/           # doc LeHub (7 pages)
-  lesite/          # doc LeSite (7 pages)
-  leboard/         # doc LeBoard (7 pages)
+  lehub/           # doc LeHub (index + 7 pages)
+  lesite/          # doc LeSite (index + 7 pages)
+  leboard/         # doc LeBoard (index + 7 pages)
   si/              # le SI transverse
 docs/superpowers/  # specs et plans de chantier (non publiés)
 sidebars.ts        # arborescence du menu latéral
