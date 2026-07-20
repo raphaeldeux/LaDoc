@@ -81,7 +81,7 @@ sidebar_position: 3
 
 | Fichier | Responsabilité |
 |---|---|
-| `plateaux.ts` | Catalogue étapes/matrices : codé dur, dupliqué avec Hub. Interfaces `Plateau`, `MatrixStage`, `RowMatrixStage`, etc. |
+| `plateaux.ts` | Catalogue étapes/matrices : codé dur, dupliqué avec Hub (`lib/plateaux.ts`). Interfaces `Plateau`, `MatrixStage`, `RowMatrixStage`, etc. |
 | `matrix.ts` | Calcul grille matricielle : `computeSlots()`, `findSnapPosition()`, cell coordinates, snap to grid |
 | `row-matrix.ts` | Variante ligne : slots ancrés à des lignes, pas à une grille fixe |
 | `emergence.ts` | Positionnement émergences : carte ancrée à une carte base, suivante en cas de déplacement |
@@ -98,13 +98,15 @@ sidebar_position: 3
 
 ### ⚠️ Piège de maintenance : catalogue de plateaux dupliqué
 
-Le fichier `src/lib/plateaux.ts` est dupliqué **à l'identique** dans LeHub à `src/lib/plateaux.ts`. Tout changement effectué sur un côté sans l'autre crée une divergence silencieuse : les étapes/matrices, leurs noms, leurs cardIds peuvent devenir incohérents entre les deux apps en production, causant des cartes mal placées ou des erreurs lors de la distribution.
+Le catalogue de plateaux vit en dur dans `src/lib/plateaux.ts` côté LeBoard, et dans `lib/plateaux.ts` côté LeHub (attention, les deux chemins diffèrent : `src/lib/` d'un côté, `lib/` de l'autre). Les deux fichiers sont censés rester identiques. Tout changement effectué d'un côté sans l'autre crée une divergence silencieuse : les étapes, les matrices, leurs noms et leurs identifiants de cartes deviennent incohérents entre les deux applications en production, ce qui provoque des cartes mal placées ou des erreurs à la distribution des lots.
 
-**Risque** : après un commit, oublier de répliquer la modification en miroir dans l'autre app.
+**La divergence existe déjà.** Au 20 juillet 2026, la version de LeHub porte en plus une fonction `listPlateaux()` absente de celle de LeBoard. L'écart est aujourd'hui sans conséquence, puisqu'il s'agit d'un utilitaire de lecture, mais il montre que la synchronisation manuelle ne tient pas dans la durée.
 
-**Recommandation** : À chaque modification du catalogue (ajout/suppression d'étape, changement de matrice) :
+**Risque** : après un commit, oublier de répliquer la modification dans l'autre application.
+
+**Recommandation** : à chaque modification du catalogue (ajout ou suppression d'étape, changement de matrice) :
 1. Modifier dans LeBoard : `src/lib/plateaux.ts`.
-2. Vérifier que LeHub a la même version en comparant : `diff LeBoard/src/lib/plateaux.ts LeHub/src/lib/plateaux.ts`.
+2. Comparer les deux versions : `diff LeBoard/src/lib/plateaux.ts LeHub/lib/plateaux.ts`.
 3. Répliquer la modification dans LeHub (idéalement dans un commit séparé pour la traçabilité).
 4. Tester les deux apps avec le même JDD (même DB en dev).
 
