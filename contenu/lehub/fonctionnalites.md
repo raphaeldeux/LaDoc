@@ -45,7 +45,7 @@ Les ateliers créés via le Hub alimentent aussi la vitrine publique LeSite (via
    - Génère une PDF d'invoice (via `lib/pdf.ts`).
    - Envoie un email de confirmation avec la facture (via `Resend` dans `lib/email.ts`).
 6. Optionnel : reçoit un rappel email J-2 avant l'atelier (cron `POST /api/cron/reminders`).
-7. Après l'atelier (J+1), reçoit un questionnaire de satisfaction par email via `POST /api/cron/satisfaction` (dans `app/api/cron/satisfaction/route.ts` si présent).
+7. Après l'atelier (J+1), reçoit une invitation au questionnaire de satisfaction. Elle part du **même cron que les rappels** (`app/api/cron/reminders/route.ts`, étape 5), et non d'un cron dédié : la fenêtre d'envoi est calculée par `lib/satisfaction-window.ts`, et le lien pointe vers `/satisfaction/[token]`. L'envoi n'a lieu que si le gabarit d'e-mail `satisfaction_invitation` est activé.
 8. Peut voir son badge obtenu et le partager (badges Open Badges 3.0).
 
 **Si le webhook est perdu** : la `Registration` reste en `pending` ; un mécanisme de réconciliation quotidienne (job cron, voir LeRunbook) rattrape les inscriptions non confirmées en interrogeant HelloAsso en direct par les `checkoutIntentId` enregistrés.

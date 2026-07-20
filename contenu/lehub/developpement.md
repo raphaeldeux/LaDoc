@@ -56,7 +56,7 @@ L'app est accessible sur `http://localhost:3000`.
 
 | Nom | Rôle | Exemple |
 |-----|------|---------|
-| `DATABASE_URL` | URL PostgreSQL | `postgresql://fresque:fresque@localhost:5432/fresquesystemique` |
+| `DATABASE_URL` | URL PostgreSQL | `postgresql://<utilisateur>:<mot_de_passe>@localhost:5432/fresquesystemique` |
 | `POSTGRES_PASSWORD` | Mot de passe Postgres | Configuré dans `docker-compose.yml` |
 
 ### HelloAsso

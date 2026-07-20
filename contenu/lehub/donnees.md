@@ -330,6 +330,18 @@ Tarification par `eventType × publicType` (matrice 3-tiers).
 | `solidaireHT`, `classiqueHT`, `soutienHT` | Float | Prix par tier |
 | **Unique** | `[eventType, publicType]` | Une seule politique par combinaison |
 
+### FormatPricing
+
+Prix hors taxes par format d'atelier. Table d'appoint très simple, distincte de `PricingPolicy` : là où `PricingPolicy` croise un type d'événement et un type de public pour produire trois tarifs, `FormatPricing` associe un prix unique à un format.
+
+| Champ | Type | Rôle |
+|---|---|---|
+| `id` | String (CUID) | Identifiant unique |
+| `format` | String | Format d'atelier, unique |
+| `priceHT` | Float | Prix hors taxes pour ce format |
+
+**Relations** : aucune. La table est lue par clé `format`.
+
 ### NotificationConfig
 
 Configuration notifications email/Telegram par type d'événement admin.
