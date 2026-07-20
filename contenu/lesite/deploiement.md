@@ -87,8 +87,8 @@ LeSite supporte 3 environnements via des variables `NEXT_PUBLIC_*` :
 
 | Env | SITE_URL | HUB_URL | ALLOW_INDEXING | Branch |
 |-----|----------|---------|----------------|--------|
-| **dev** | `https://auto.fresquesystemique.org` | `https://dev.hub` | `false` | (local) |
-| **preview** | `https://auto.fresquesystemique.org` | `https://hub.fresquesystemique.org` | `false` | `main` |
+| **dev** | local (localhost:3002) | local (localhost:3001) | `false` | (local) |
+| **preview** | (environnement partagé, voir LeRunbook) | `https://hub.fresquesystemique.org` | `false` | `main` |
 | **prod** | `https://fresquesystemique.org` | `https://hub.fresquesystemique.org` | `true` | `main` |
 
 Le passage **preview** → **prod** nécessite :

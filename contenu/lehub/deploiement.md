@@ -140,8 +140,9 @@ En cas de problème post-déploiement :
 ### `dev.hub` (environnement partagé)
 
 - Branche : `dev` (push manuel).
-- Même procédure CI/CD, déploie sur dev.hub.fresquesystemique.org.
+- Même procédure CI/CD, déploie sur l'environnement partagé.
 - Base DB partagée avec `dev.board`.
+- Accès et adresses dans LeRunbook.
 
 ## Considérations performance
 

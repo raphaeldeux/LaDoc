@@ -11,14 +11,14 @@ sidebar_position: 7
 - **Node.js** 20+ (avec npm)
 - **Docker** (pour PostgreSQL local)
 - **Git**
-- Accès repo GitHub : `https://github.com/raphaeldeux/OpenFresqueSystemique`
+- Accès repo GitHub : `https://github.com/fresquesystemique/LeHub`
 
 ## Installation locale
 
 ```bash
 # 1. Clone le repo
-git clone https://github.com/raphaeldeux/OpenFresqueSystemique.git
-cd OpenFresqueSystemique
+git clone https://github.com/fresquesystemique/LeHub.git
+cd LeHub
 
 # 2. Copy .env.example et remplir variables
 cp .env.example .env.local
@@ -130,20 +130,18 @@ npm run test:watch
 
 ## Environnement `dev.hub`
 
-Un environnement de dev **partagé** existe sur le VPS : `https://dev.hub.fresquesystemique.org` (routage Nginx réel).
+Un environnement de dev **partagé** existe sur le VPS (routage Nginx réel).
 
 ### Principe
 
 - Une seule base de données PostgreSQL **partagée** avec `dev.board` (même DB).
 - Stack Docker partagée (redis, postgres, nginx).
-- URLs hardcodées pour le routage (`dev.hub.*` + `dev.board.*`).
-- Déploiement manuel : push sur branche `dev`, puis SSH/pull/docker compose sur le VPS.
+- URLs hardcodées pour le routage.
+- Déploiement par push sur branche `dev`.
 
 ### Accès (voir LeRunbook)
 
-- URL : `dev.hub.fresquesystemique.org`
-- Credentials et accès serveur : voir LeRunbook
-- Pour consulter les logs du conteneur : voir LeRunbook
+Les adresses et les accès sont dans LeRunbook.
 
 ### Utilité
 

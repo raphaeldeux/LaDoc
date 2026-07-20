@@ -10,7 +10,7 @@ sidebar_position: 7
 
 - **Node.js** 20+ (avec npm)
 - **Git**
-- Accès repo GitHub : `https://github.com/raphaeldeux/LeSite`
+- Accès repo GitHub : `https://github.com/fresquesystemique/LeSite`
 
 Pas de Docker ni de base de données locales requises pour le dev (LeSite est une SPA statique + fetch d'API).
 
@@ -18,7 +18,7 @@ Pas de Docker ni de base de données locales requises pour le dev (LeSite est un
 
 ```bash
 # 1. Clone le repo
-git clone https://github.com/raphaeldeux/LeSite.git
+git clone https://github.com/fresquesystemique/LeSite.git
 cd LeSite
 
 # 2. Copy .env.example et remplir les variables
@@ -39,8 +39,8 @@ L'app est accessible sur `http://localhost:3000`.
 
 | Nom | Rôle | Exemple |
 |-----|------|---------|
-| `NEXT_PUBLIC_SITE_URL` | URL LeSite public (inlinée au build) | `https://auto.fresquesystemique.org` (dev) ou `https://fresquesystemique.org` (prod) |
-| `NEXT_PUBLIC_HUB_URL` | URL LeHub (inlinée au build) | `https://dev.hub` (dev) ou `https://hub.fresquesystemique.org` (prod) |
+| `NEXT_PUBLIC_SITE_URL` | URL LeSite public (inlinée au build) | `http://localhost:3000` (local) ou `https://fresquesystemique.org` (prod) |
+| `NEXT_PUBLIC_HUB_URL` | URL LeHub (inlinée au build) | `http://localhost:3001` (local) ou `https://hub.fresquesystemique.org` (prod) |
 | `NEXT_PUBLIC_ALLOW_INDEXING` | Indexation moteurs (inlinée au build) | `"false"` (dev/preview) ou `"true"` (prod) |
 
 ### Authentification (pont d'auth)
@@ -82,7 +82,7 @@ En dev, tu peux ignorer la plupart des secrets :
 
 ## Développement local avec LeHub local
 
-Si tu fais du dev avec LeHub local (ex: `dev.hub` sur localhost:3000) :
+Si tu fais du dev avec LeHub local (ex: LeHub sur localhost:3001) :
 
 ```env
 # .env.local
