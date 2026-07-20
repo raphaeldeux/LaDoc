@@ -22,7 +22,6 @@ const sidebars: SidebarsConfig = {
       id: 'lehub/index',
       label: 'Accueil LeHub',
     },
-    /*
     {
       type: 'category',
       label: 'LeSite',
@@ -37,6 +36,7 @@ const sidebars: SidebarsConfig = {
         'lesite/deploiement',
       ],
     },
+    /*
     {
       type: 'category',
       label: 'LeBoard',
